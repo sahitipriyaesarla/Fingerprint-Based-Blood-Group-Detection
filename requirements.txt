@@ -1,0 +1,6 @@
+Flask==3.0.3
+opencv-python==4.10.0.84
+tensorflow==2.16.1
+pandas==2.2.2
+scikit-learn==1.4.2
+numpy==1.26.4
