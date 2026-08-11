@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Static Graph - India Blood Group Statistics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root{
+      --bg1:#0f2027;
+      --bg2:#203a43;
+      --bg3:#2c5364;
+      --card:#ffffff14;
+      --border:#ffffff25;
+      --primary:#00e5ff;
+      --secondary:#00bcd4;
+      --text:#ffffff;
+    }
+
+    *{ box-sizing:border-box }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:"Segoe UI",system-ui,sans-serif;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2),var(--bg3));
+      color:var(--text);
+      padding:20px;
+    }
+
+    .container{
+      max-width:1400px;
+      margin:0 auto;
+    }
+
+    .header{
+      text-align:center;
+      margin-bottom:30px;
+    }
+
+    h1{
+      margin-bottom:10px;
+      font-size:2rem;
+    }
+
+    .subtitle{
+      opacity:0.8;
+      margin-bottom:20px;
+    }
+
+    .back-btn{
+      display:inline-block;
+      padding:10px 20px;
+      background:rgba(255,255,255,0.1);
+      border:1px solid rgba(255,255,255,0.2);
+      border-radius:10px;
+      color:var(--text);
+      text-decoration:none;
+      margin-bottom:20px;
+      transition:all 0.3s ease;
+    }
+
+    .back-btn:hover{
+      background:rgba(255,255,255,0.2);
+    }
+
+    .stats-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:20px;
+      margin-bottom:30px;
+    }
+
+    .stat-card{
+      background:var(--card);
+      backdrop-filter: blur(16px);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:25px;
+      text-align:center;
+    }
+
+    .stat-number{
+      font-size:2.5rem;
+      font-weight:700;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+
+    .stat-label{
+      opacity:0.8;
+      margin-top:5px;
+    }
+
+    .chart-section{
+      background:var(--card);
+      backdrop-filter: blur(16px);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:30px;
+      margin-bottom:20px;
+    }
+
+    .chart-container{
+      position:relative;
+      height:400px;
+      margin-top:20px;
+    }
+
+    .info-section{
+      background:var(--card);
+      backdrop-filter: blur(16px);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:30px;
+    }
+
+    .blood-group-list{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+      gap:15px;
+      margin-top:20px;
+    }
+
+    .blood-group-item{
+      display:flex;
+      align-items:center;
+      padding:15px;
+      background:rgba(255,255,255,0.05);
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+
+    .blood-group-badge{
+      display:inline-block;
+      padding:8px 12px;
+      border-radius:8px;
+      font-weight:700;
+      margin-right:15px;
+      min-width:50px;
+      text-align:center;
+    }
+
+    .badge-ap{ background:#60a5fa; color:#000; }
+    .badge-an{ background:#93c5fd; color:#000; }
+    .badge-abp{ background:#818cf8; color:#fff; }
+    .badge-abn{ background:#a5b4fc; color:#000; }
+    .badge-bp{ background:#34d399; color:#000; }
+    .badge-bn{ background:#6ee7b7; color:#000; }
+    .badge-op{ background:#38bdf8; color:#000; }
+    .badge-on{ background:#0ea5e9; color:#fff; }
+
+    .percentage{
+      font-weight:600;
+      font-size:1.1rem;
+    }
+
+    @media(max-width:768px){
+      .stats-grid{ grid-template-columns:1fr; }
+      .blood-group-list{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <a href="/" class="back-btn">← Back to Dashboard</a>
+  
+  <div class="header">
+    <h1>📈 India Blood Group Statistics</h1>
+    <p class="subtitle">Demographic distribution of blood groups across India</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number">O+</div>
+      <div class="stat-label">Most Common Blood Group</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">32.4%</div>
+      <div class="stat-label">Population with O+ Blood</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">AB-</div>
+      <div class="stat-label">Rarest Blood Group</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">1.5%</div>
+      <div class="stat-label">Population with AB- Blood</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h3>Blood Group Distribution in India</h3>
+    <div class="chart-container">
+      <canvas id="bloodGroupChart"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h3>Rh Factor Distribution</h3>
+    <div class="chart-container">
+      <canvas id="rhFactorChart"></canvas>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <h3>Detailed Blood Group Breakdown</h3>
+    <div class="blood-group-list">
+      <div class="blood-group-item">
+        <span class="blood-group-badge badge-ap">A+</span>
+        <span class="percentage">21.8%</span>
+      </div>
+      <div class="blood-group-item">
+        <span class="blood-group-badge badge-an">A-</span>
+        <span class="percentage">1.7%</span>
+      </div>
+      <div class="blood-group-item">
+        <span class="blood-group-badge badge-abp">AB+</span>
+        <span class="percentage">8.9%</span>
+      </div>
+      <div class="blood-group-item">
+        <span class="blood-group-badge badge-abn">AB-</span>
+        <span class="percentage">1.5%</span>
+      </div>
+      <div class="blood-group-item">
+        <span class="blood-group-badge badge-bp">B+</span>
+        <span class="percentage">22.3%</span>
+      </div>
+      <div class="blood-group-item">
+        <span class="blood-group-badge badge-bn">B-</span>
+        <span class="percentage">2.4%</span>
+      </div>
+      <div class="blood-group-item">
+        <span class="blood-group-badge badge-op">O+</span>
+        <span class="percentage">32.4%</span>
+      </div>
+      <div class="blood-group-item">
+        <span class="blood-group-badge badge-on">O-</span>
+        <span class="percentage">9.0%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// India Blood Group Statistics Data
+const bloodGroupData = {
+  labels: ['O+', 'B+', 'A+', 'AB+', 'O-', 'B-', 'A-', 'AB-'],
+  percentages: [32.4, 22.3, 21.8, 8.9, 9.0, 2.4, 1.7, 1.5],
+  colors: [
+    '#38bdf8', '#34d399', '#60a5fa', '#818cf8',
+    '#0ea5e9', '#6ee7b7', '#93c5fd', '#a5b4fc'
+  ]
+};
+
+const rhFactorData = {
+  labels: ['Rh Positive (85.4%)', 'Rh Negative (14.6%)'],
+  percentages: [85.4, 14.6],
+  colors: ['#00e5ff', '#ff6b6b']
+};
+
+// Blood Group Distribution Chart
+const ctx1 = document.getElementById('bloodGroupChart').getContext('2d');
+new Chart(ctx1, {
+  type: 'doughnut',
+  data: {
+    labels: bloodGroupData.labels,
+    datasets: [{
+      data: bloodGroupData.percentages,
+      backgroundColor: bloodGroupData.colors,
+      borderColor: 'rgba(255,255,255,0.2)',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          color: '#fff',
+          font: { size: 12, weight: 'bold' },
+          padding: 15
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return context.label + ': ' + context.parsed + '%';
+          }
+        }
+      }
+    },
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 1500
+    }
+  }
+});
+
+// Rh Factor Distribution Chart
+const ctx2 = document.getElementById('rhFactorChart').getContext('2d');
+new Chart(ctx2, {
+  type: 'pie',
+  data: {
+    labels: rhFactorData.labels,
+    datasets: [{
+      data: rhFactorData.percentages,
+      backgroundColor: rhFactorData.colors,
+      borderColor: 'rgba(255,255,255,0.2)',
+      borderWidth: 2
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'right',
+        labels: {
+          color: '#fff',
+          font: { size: 14, weight: 'bold' },
+          padding: 15
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return context.label + ': ' + context.parsed + '%';
+          }
+        }
+      }
+    },
+    animation: {
+      animateRotate: true,
+      animateScale: true,
+      duration: 1500
+    }
+  }
+});
+</script>
+
+</body>
+</html>
